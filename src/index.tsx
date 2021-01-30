@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import app from 'AppShell/store';
@@ -20,6 +20,12 @@ import 'animate.css';
 import './styles/app.scss';
 
 export const store = configureStore({
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      // Ignore these action types
+      ignoredActions: ['photos/setPhoto']
+    }
+  }),
   reducer: { app, camera, user, snapMap, snap, chat }
 });
 

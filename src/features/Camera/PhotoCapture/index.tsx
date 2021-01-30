@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, createContext } from 'react';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { setPhoto } from '../store';
@@ -50,6 +50,25 @@ const PhotoCapture: React.FC<Props> = ({ takePic, closePic, videoElem }) => {
     }
   };
 
+  const sendToPrinter = async function () {
+    const dataURL = getDataURL();
+
+    console.log(dataURL);
+    const creds = btoa('user:Pr!ntMy$e1f!e');
+    const respo = await fetch('https://recieptprinter.ngrok.io/image', {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${creds}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ dataURL: dataURL })
+    });
+
+    console.log(respo);
+
+    console.log(dataURL);
+  };
+
   return (
     <section
       data-test="photo-capture"
@@ -82,7 +101,7 @@ const PhotoCapture: React.FC<Props> = ({ takePic, closePic, videoElem }) => {
             <Button icon="faExternalLinkAlt" label="Story" />
           </div>
           <div className="right">
-            <Button icon="faPlayCircle" label="Send To" />
+            <Button icon="faPlayCircle" label="Send To" onclick={sendToPrinter} />
           </div>
         </footer>
       </div>
